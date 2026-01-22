@@ -4,7 +4,7 @@ public static class RandomDistributions
 {
     private static Random _random = new Random();
 
-    // Экспоненциальное распределение (для интервалов прибытия)
+    // Exponential distribution (for arrival intervals)
     public static TimeSpan Exponential(double meanMinutes)
     {
         double u = _random.NextDouble();
@@ -12,7 +12,7 @@ public static class RandomDistributions
         return TimeSpan.FromMinutes(minutes);
     }
 
-    // Нормальное распределение (для времени обработки)
+    // Normal distribution (for processing time)
     public static TimeSpan Normal(double meanMinutes, double stdDevMinutes)
     {
         // Box-Muller transform
@@ -21,13 +21,13 @@ public static class RandomDistributions
         double randStdNormal = Math.Sqrt(-2.0 * Math.Log(u1)) * Math.Sin(2.0 * Math.PI * u2);
         double minutes = meanMinutes + stdDevMinutes * randStdNormal;
         
-        // Не допускаем отрицательных значений
+        // Don't allow negative values
         minutes = Math.Max(0.1, minutes);
         
         return TimeSpan.FromMinutes(minutes);
     }
 
-    // Треугольное распределение (min, mode, max)
+    // Triangular distribution (min, mode, max)
     public static TimeSpan Triangular(double minMinutes, double modeMinutes, double maxMinutes)
     {
         double u = _random.NextDouble();
@@ -46,7 +46,7 @@ public static class RandomDistributions
         return TimeSpan.FromMinutes(minutes);
     }
 
-    // Установить seed для воспроизводимости результатов
+    // Set seed for reproducible results
     public static void SetSeed(int seed)
     {
         _random = new Random(seed);

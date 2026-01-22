@@ -8,13 +8,13 @@ namespace SimSharpExample.Scenarios;
 public class StochasticScenario : ScenarioBase
 {
     public StochasticScenario() 
-        : base("Stochastic", "Реалистичная симуляция со случайным временем обработки и прибытия")
+        : base("Stochastic", "Realistic simulation with random processing and arrival times")
     {
     }
 
     public override ProductionLine CreateProductionLine(Simulation sim, MetricsCollector metrics)
     {
-        // Устанавливаем seed для воспроизводимости
+        // Set seed for reproducibility
         RandomDistributions.SetSeed(42);
         
         return new StochasticProductionLine(sim, metrics);
@@ -28,35 +28,35 @@ public class StochasticScenario : ScenarioBase
         var exporter = new CsvExporter($"Results/{Name}");
 
         Console.WriteLine($"\n{'═', 70}");
-        Console.WriteLine($"  Сценарий: {Name}");
+        Console.WriteLine($"  Scenario: {Name}");
         Console.WriteLine($"  {Description}");
-        Console.WriteLine($"{'═', 70}");
+        Console.WriteLine($"{'=', 70}");
 
-        // Генерируем детали со стохастическим прибытием
+        // Generate items with stochastic arrival
         sim.Process(line.GenerateItems(sim, itemCount, useStochasticArrival: true, meanInterarrivalMinutes: 5.0));
         
-        // Запускаем
+        // Run
         sim.Run();
         
-        // Результаты
+        // Results
         var totalTime = sim.Now - new DateTime(1970, 1, 1);
         
-        Console.WriteLine($"\nВремя симуляции: {totalTime}");
+        Console.WriteLine($"\nSimulation time: {totalTime}");
         metrics.PrintStationStats(line, totalTime);
         metrics.PrintSummary(totalTime);
         
-        // Экспорт
+        // Export
         exporter.ExportAll(line, metrics, totalTime);
     }
 }
 
-// Стохастическая производственная линия
+// Stochastic production line
 public class StochasticProductionLine : ProductionLine
 {
     public StochasticProductionLine(Simulation sim, MetricsCollector metrics)
         : base(sim, metrics)
     {
-        // Пересоздаем станции со стохастикой
+        // Recreate stations with stochastic behavior
         CuttingStation = new Station(sim, "Cutting", 1, TimeSpan.FromMinutes(8), useStochastic: true);
         AssemblyStation = new Station(sim, "Assembly", 1, TimeSpan.FromMinutes(12), useStochastic: true);
         TestingStation = new Station(sim, "Testing", 1, TimeSpan.FromMinutes(10), useStochastic: true);

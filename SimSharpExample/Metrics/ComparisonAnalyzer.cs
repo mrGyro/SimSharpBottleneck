@@ -33,12 +33,12 @@ public class ComparisonAnalyzer
     public void PrintComparison()
     {
         Console.WriteLine("\n╔══════════════════════════════════════════════════════════════╗");
-        Console.WriteLine("║              СРАВНИТЕЛЬНЫЙ АНАЛИЗ ВСЕХ СЦЕНАРИЕВ            ║");
+        Console.WriteLine("║         COMPARATIVE ANALYSIS OF ALL SCENARIOS                ║");
         Console.WriteLine("╚══════════════════════════════════════════════════════════════╝\n");
 
-        // Таблица сравнения
+        // Comparison table
         Console.WriteLine("┌────────────────────┬──────────────┬─────────────┬──────────────┬──────────────┐");
-        Console.WriteLine("│ Сценарий           │ Время (мин)  │ Throughput  │ Avg LeadTime │ Assembly Util│");
+        Console.WriteLine("│ Scenario           │ Time (min)   │ Throughput  │ Avg LeadTime │ Assembly Util│");
         Console.WriteLine("├────────────────────┼──────────────┼─────────────┼──────────────┼──────────────┤");
 
         var baseline = _results.FirstOrDefault(r => r.Name == "Baseline");
@@ -47,7 +47,7 @@ public class ComparisonAnalyzer
         {
             var assemblyUtil = result.StationUtilization.GetValueOrDefault("Assembly", 0);
             
-            // Вычисляем изменения относительно baseline
+            // Calculate changes relative to baseline
             string throughputChange = "";
             string leadTimeChange = "";
             
@@ -71,7 +71,7 @@ public class ComparisonAnalyzer
     private void PrintInsights()
     {
         Console.WriteLine("\n╔══════════════════════════════════════════════════════════════╗");
-        Console.WriteLine("║                      КЛЮЧЕВЫЕ ВЫВОДЫ                         ║");
+        Console.WriteLine("║                      KEY INSIGHTS                            ║");
         Console.WriteLine("╚══════════════════════════════════════════════════════════════╝\n");
 
         var baseline = _results.FirstOrDefault(r => r.Name == "Baseline");
@@ -81,23 +81,23 @@ public class ComparisonAnalyzer
         if (baseline != null && improved != null)
         {
             var improvement = ((improved.Throughput - baseline.Throughput) / baseline.Throughput) * 100;
-            Console.WriteLine($"❌ ПАРАДОКС: Улучшение не-bottleneck (Cutting):");
-            Console.WriteLine($"   → Throughput изменился всего на {improvement:F2}%");
-            Console.WriteLine($"   → Практически НЕТ эффекта!");
+            Console.WriteLine($"❌ PARADOX: Improving non-bottleneck (Cutting):");
+            Console.WriteLine($"   → Throughput changed only by {improvement:F2}%");
+            Console.WriteLine($"   → Practically NO effect!");
         }
 
         if (baseline != null && bottleneck != null)
         {
             var improvement = ((bottleneck.Throughput - baseline.Throughput) / baseline.Throughput) * 100;
             var leadTimeImprovement = ((baseline.AvgLeadTime - bottleneck.AvgLeadTime).TotalMinutes / baseline.AvgLeadTime.TotalMinutes) * 100;
-            Console.WriteLine($"\n✅ ПРАВИЛЬНО: Улучшение bottleneck (Assembly):");
-            Console.WriteLine($"   → Throughput вырос на {improvement:F2}%");
-            Console.WriteLine($"   → Lead Time снизился на {leadTimeImprovement:F2}%");
-            Console.WriteLine($"   → ЗНАЧИТЕЛЬНОЕ улучшение системы!");
+            Console.WriteLine($"\n✅ CORRECT: Improving bottleneck (Assembly):");
+            Console.WriteLine($"   → Throughput increased by {improvement:F2}%");
+            Console.WriteLine($"   → Lead Time decreased by {leadTimeImprovement:F2}%");
+            Console.WriteLine($"   → SIGNIFICANT system improvement!");
         }
 
-        Console.WriteLine("\n💡 ВЫВОД: Локальная оптимизация ≠ Глобальная оптимизация");
-        Console.WriteLine("   Инвестируйте в узкие места, а не в быстрые станции!");
+        Console.WriteLine("\n💡 CONCLUSION: Local optimization ≠ Global optimization");
+        Console.WriteLine("   Invest in bottlenecks, not in fast stations!");
     }
 
     public void ExportComparisonCsv(string outputPath = "Results/comparison.csv")
@@ -112,6 +112,6 @@ public class ComparisonAnalyzer
         }
 
         File.WriteAllText(outputPath, sb.ToString());
-        Console.WriteLine($"\n✓ Сравнительная таблица экспортирована: {outputPath}");
+        Console.WriteLine($"\n✓ Comparison table exported: {outputPath}");
     }
 }

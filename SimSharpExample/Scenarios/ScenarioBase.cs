@@ -15,10 +15,10 @@ public abstract class ScenarioBase
         Description = description;
     }
 
-    // Каждый сценарий определяет свои параметры
+    // Each scenario defines its own parameters
     public abstract ProductionLine CreateProductionLine(Simulation sim, MetricsCollector metrics);
 
-    // Общая логика запуска (может быть переопределена)
+    // General launch logic (can be overridden)
     public virtual void Run(int itemCount = 10)
     {
         var sim = new Simulation();
@@ -26,25 +26,25 @@ public abstract class ScenarioBase
         var line = CreateProductionLine(sim, metrics);
         var exporter = new CsvExporter($"Results/{Name}");
 
-        Console.WriteLine($"\n{'═', 70}");
-        Console.WriteLine($"  Сценарий: {Name}");
+        Console.WriteLine($"\n{'=', 70}");
+        Console.WriteLine($"  Scenario: {Name}");
         Console.WriteLine($"  {Description}");
-        Console.WriteLine($"{'═', 70}");
+        Console.WriteLine($"{'=', 70}");
 
-        // Генерируем детали
+        // Generate items
         sim.Process(line.GenerateItems(sim, itemCount));
         
-        // Запускаем
+        // Run
         sim.Run();
         
-        // Результаты
+        // Results
         var totalTime = sim.Now - new DateTime(1970, 1, 1);
         
-        Console.WriteLine($"\nВремя симуляции: {totalTime}");
+        Console.WriteLine($"\nSimulation time: {totalTime}");
         metrics.PrintStationStats(line, totalTime);
         metrics.PrintSummary(totalTime);
         
-        // Экспорт
+        // Export
         exporter.ExportAll(line, metrics, totalTime);
     }
 }

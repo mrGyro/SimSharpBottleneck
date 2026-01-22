@@ -11,7 +11,7 @@ public class MetricsCollector
         CompletedItems = new List<Item>();
     }
 
-    // Регистрация завершенной детали
+    // Record completed item
     public void RecordCompletedItem(Item item)
     {
         if (item.CompletionTime.HasValue)
@@ -20,7 +20,7 @@ public class MetricsCollector
         }
     }
 
-    // Средний Lead Time
+    // Average Lead Time
     public TimeSpan GetAverageLeadTime()
     {
         if (CompletedItems.Count == 0)
@@ -33,11 +33,11 @@ public class MetricsCollector
         return TimeSpan.FromTicks(totalTicks / CompletedItems.Count);
     }
 
-    // Статистика по станциям (расширенная)
+    // Station statistics (detailed)
     public void PrintStationStats(ProductionLine line, TimeSpan totalTime)
     {
-        Console.WriteLine("\n=== Детальная статистика станций ===");
-        Console.WriteLine($"{"Станция",-12} | {"Обработано",-11} | {"Утилизация",-12} | {"Ср.Очередь",-11} | {"Макс.Очередь",-12}");
+        Console.WriteLine("\n=== Detailed Station Statistics ===");
+        Console.WriteLine($"{"Station",-12} | {"Processed",-11} | {"Utilization",-12} | {"Avg.Queue",-11} | {"Max.Queue",-12}");
         Console.WriteLine(new string('-', 70));
         
         PrintStationRow(line.CuttingStation, totalTime);
@@ -51,7 +51,7 @@ public class MetricsCollector
         Console.WriteLine($"{station.Name,-12} | {station.ProcessedItems,-11} | {station.GetUtilization(totalTime),10:F2}% | {station.GetAverageQueueLength(),11:F2} | {station.MaxQueueLength,-12}");
     }
     
-    // Расчет Throughput (деталей в час)
+    // Calculate Throughput (items per hour)
     public double GetThroughput(TimeSpan totalTime)
     {
         if (totalTime.TotalHours == 0)
@@ -59,18 +59,18 @@ public class MetricsCollector
         return CompletedItems.Count / totalTime.TotalHours;
     }
     
-    // Общая статистика
+    // Overall statistics
     public void PrintSummary(TimeSpan totalTime)
     {
-        Console.WriteLine("\n=== Общая статистика ===");
-        Console.WriteLine($"Время симуляции: {totalTime}");
-        Console.WriteLine($"Всего завершено деталей: {CompletedItems.Count}");
-        Console.WriteLine($"Throughput: {GetThroughput(totalTime):F2} деталей/час");
-        Console.WriteLine($"Средний Lead Time: {GetAverageLeadTime()}");
+        Console.WriteLine("\n=== Overall Statistics ===");
+        Console.WriteLine($"Simulation time: {totalTime}");
+        Console.WriteLine($"Total completed items: {CompletedItems.Count}");
+        Console.WriteLine($"Throughput: {GetThroughput(totalTime):F2} items/hour");
+        Console.WriteLine($"Average Lead Time: {GetAverageLeadTime()}");
         
         if (CompletedItems.Count > 0)
         {
-            Console.WriteLine("\nLead Time по деталям:");
+            Console.WriteLine("\nLead Time by items:");
             foreach (var item in CompletedItems)
             {
                 Console.WriteLine($"  Item #{item.Id}: {item.GetLeadTime()}");

@@ -7,7 +7,7 @@ namespace SimSharpExample.Scenarios;
 public class ImprovedStationScenario : ScenarioBase
 {
     public ImprovedStationScenario() 
-        : base("ImprovedCutting", "Ускорили Cutting на 20% (8 мин → 6.4 мин), но это НЕ bottleneck!")
+        : base("ImprovedCutting", "Improved Cutting by 20% (8 min → 6.4 min), but this is NOT a bottleneck!")
     {
     }
 
@@ -15,17 +15,17 @@ public class ImprovedStationScenario : ScenarioBase
     {
         var line = new ProductionLine(sim, metrics);
         
-        // Пересоздаем станции с новыми параметрами
+        // Recreate stations with new parameters
         return new CustomProductionLine(sim, metrics,
-            cuttingTime: TimeSpan.FromMinutes(6.4),   // Ускорили на 20%!
-            assemblyTime: TimeSpan.FromMinutes(12),    // Без изменений (bottleneck)
+            cuttingTime: TimeSpan.FromMinutes(6.4),   // Improved by 20%!
+            assemblyTime: TimeSpan.FromMinutes(12),    // No changes (bottleneck)
             testingTime: TimeSpan.FromMinutes(10),
             packagingTime: TimeSpan.FromMinutes(6)
         );
     }
 }
 
-// Кастомная производственная линия с настраиваемыми временами
+// Custom production line with configurable times
 public class CustomProductionLine : ProductionLine
 {
     public CustomProductionLine(Simulation sim, MetricsCollector metrics,
@@ -33,7 +33,7 @@ public class CustomProductionLine : ProductionLine
         TimeSpan testingTime, TimeSpan packagingTime)
         : base(sim, metrics)
     {
-        // Пересоздаем станции с новыми временами
+        // Recreate stations with new times
         CuttingStation = new Station(sim, "Cutting", 1, cuttingTime);
         AssemblyStation = new Station(sim, "Assembly", 1, assemblyTime);
         TestingStation = new Station(sim, "Testing", 1, testingTime);

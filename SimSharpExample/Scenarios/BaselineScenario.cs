@@ -7,7 +7,7 @@ namespace SimSharpExample.Scenarios;
 public class BaselineScenario : ScenarioBase
 {
     public BaselineScenario() 
-        : base("Baseline", "Базовая конфигурация - все станции со стандартным временем обработки")
+        : base("Baseline", "Baseline configuration - all stations with standard processing time")
     {
     }
 

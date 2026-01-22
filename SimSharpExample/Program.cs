@@ -4,17 +4,17 @@ using SimSharpExample.Metrics;
 using SimSharpExample.Scenarios;
 
 Console.WriteLine("╔══════════════════════════════════════════════════════════════╗");
-Console.WriteLine("║  СИМУЛЯЦИЯ ПРОИЗВОДСТВЕННОЙ ЛИНИИ - АНАЛИЗ УЗКИХ МЕСТ       ║");
-Console.WriteLine("║  Демонстрация парадокса локальной оптимизации                ║");
+Console.WriteLine("║  PRODUCTION LINE SIMULATION - BOTTLENECK ANALYSIS            ║");
+Console.WriteLine("║  Demonstrating local optimization paradox                    ║");
 Console.WriteLine("╚══════════════════════════════════════════════════════════════╝");
 
-// Количество деталей для каждого сценария
+// Number of items for each scenario
 int itemCount = 20;
 
-// Создаем анализатор для сравнения
+// Create analyzer for comparison
 var comparisonAnalyzer = new ComparisonAnalyzer();
 
-// Запускаем все сценарии
+// Run all scenarios
 var scenarios = new List<ScenarioBase>
 {
     new BaselineScenario(),
@@ -25,18 +25,18 @@ var scenarios = new List<ScenarioBase>
 
 foreach (var scenario in scenarios)
 {
-    // Запускаем сценарий
+    // Run scenario
     var sim = new Simulation();
     var metrics = new MetricsCollector();
     var line = scenario.CreateProductionLine(sim, metrics);
     var exporter = new CsvExporter($"Results/{scenario.Name}");
 
     Console.WriteLine($"\n{'═', 70}");
-    Console.WriteLine($"  Сценарий: {scenario.Name}");
+    Console.WriteLine($"  Scenario: {scenario.Name}");
     Console.WriteLine($"  {scenario.Description}");
     Console.WriteLine($"{'═', 70}");
 
-    // Генерируем детали (стохастически для Stochastic, иначе обычно)
+    // Generate items (stochastically for Stochastic, otherwise normally)
     if (scenario is StochasticScenario)
     {
         sim.Process(line.GenerateItems(sim, itemCount, useStochasticArrival: true, meanInterarrivalMinutes: 5.0));
@@ -50,13 +50,13 @@ foreach (var scenario in scenarios)
     
     var totalTime = sim.Now - new DateTime(1970, 1, 1);
     
-    Console.WriteLine($"\nВремя симуляции: {totalTime}");
+    Console.WriteLine($"\nSimulation time: {totalTime}");
     metrics.PrintStationStats(line, totalTime);
     metrics.PrintSummary(totalTime);
     
     exporter.ExportAll(line, metrics, totalTime);
     
-    // Собираем данные для сравнения
+    // Collect data for comparison
     var utilization = new Dictionary<string, double>
     {
         { "Cutting", line.CuttingStation.GetUtilization(totalTime) },
@@ -70,11 +70,11 @@ foreach (var scenario in scenarios)
     Console.WriteLine();
 }
 
-// Выводим сравнительный анализ
+// Print comparative analysis
 comparisonAnalyzer.PrintComparison();
 comparisonAnalyzer.ExportComparisonCsv();
 
 Console.WriteLine("\n╔══════════════════════════════════════════════════════════════╗");
-Console.WriteLine("║  АНАЛИЗ ЗАВЕРШЕН!                                            ║");
-Console.WriteLine("║  Проверьте папки Results/* для CSV файлов                    ║");
+Console.WriteLine("║  ANALYSIS COMPLETE!                                          ║");
+Console.WriteLine("║  Check Results/* folders for CSV files                       ║");
 Console.WriteLine("╚══════════════════════════════════════════════════════════════╝");

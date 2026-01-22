@@ -9,14 +9,14 @@ public class Station
     public Resource MachineResource { get; private set; }
     public TimeSpan MeanProcessingTime { get; private set; }
     public bool UseStochastic { get; set; } = false;
-    public double StdDevPercentage { get; set; } = 0.2; // 20% стандартное отклонение
+    public double StdDevPercentage { get; set; } = 0.2; // 20% standard deviation
 
-    // Для статистики
+    // For statistics
     public int ProcessedItems { get; private set; } = 0;
     public TimeSpan TotalBusyTime { get; private set; } = TimeSpan.Zero;
     public int MaxQueueLength { get; private set; } = 0;
     
-    // Для отслеживания очередей
+    // For tracking queues
     private List<int> _queueLengthSamples = new List<int>();
 
     public Station(Simulation sim, string name, int capacity, TimeSpan meanProcessingTime, bool useStochastic = false)
@@ -28,27 +28,27 @@ public class Station
         UseStochastic = useStochastic;
     }
 
-    // Процесс обработки детали на станке
+    // Item processing on the machine
     public IEnumerable<Event> Process(SimSharp.Simulation sim, Item item)
     {
-        // Записываем размер очереди (InUse = занятые ресурсы, Waiting в очереди)
+        // Record queue size (InUse = busy resources)
         int queueLength = MachineResource.InUse;
         _queueLengthSamples.Add(queueLength);
         if (queueLength > MaxQueueLength)
             MaxQueueLength = queueLength;
 
-        // Запрос на использование станка
+        // Request machine usage
         var request = MachineResource.Request();
-        yield return request; // Ожидание освобождения станка
+        yield return request; // Wait for machine to become available
 
-        // Засекаем время начала обработки
+        // Record start time of processing
         var startTime = sim.Now;
 
-        // Вычисляем время обработки (детерминированное или стохастическое)
+        // Calculate processing time (deterministic or stochastic)
         TimeSpan processingTime;
         if (UseStochastic)
         {
-            // Используем нормальное распределение со стандартным отклонением
+            // Use normal distribution with standard deviation
             double stdDev = MeanProcessingTime.TotalMinutes * StdDevPercentage;
             processingTime = RandomDistributions.Normal(MeanProcessingTime.TotalMinutes, stdDev);
         }
@@ -57,20 +57,20 @@ public class Station
             processingTime = MeanProcessingTime;
         }
 
-        // Обработка детали
+        // Process item
         yield return sim.Timeout(processingTime);
 
-        // Рассчитываем время занятости
+        // Calculate busy time
         TotalBusyTime += (sim.Now - startTime);
 
-        // Освобождение станка
+        // Release machine
         MachineResource.Release(request);
 
-        // Обновление статистики
+        // Update statistics
         ProcessedItems++;
     }
 
-    // Получить среднюю длину очереди
+    // Get average queue length
     public double GetAverageQueueLength()
     {
         if (_queueLengthSamples.Count == 0)
@@ -78,7 +78,7 @@ public class Station
         return _queueLengthSamples.Average();
     }
 
-    // Рассчитать утилизацию (в процентах)
+    // Calculate utilization (in percentage)
     public double GetUtilization(TimeSpan totalTime)
     {
         if (totalTime == TimeSpan.Zero)

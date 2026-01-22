@@ -1,6 +1,6 @@
 # 🏭 SimSharp Bottleneck Detection Demo
 
-> Дискретно-событийная симуляция производственной линии, демонстрирующая парадокс локальной оптимизации и Theory of Constraints.
+> Discrete-Event Simulation of a production line demonstrating the local optimization paradox and Theory of Constraints.
 
 [![.NET](https://img.shields.io/badge/.NET-8.0-blue)](https://dotnet.microsoft.com/)
 [![SimSharp](https://img.shields.io/badge/SimSharp-3.4.2-green)](https://github.com/abeham/SimSharp)
@@ -8,26 +8,26 @@
 
 ---
 
-## 📋 О проекте
+## 📋 About
 
-Этот проект демонстрирует, как **улучшение отдельного процесса не всегда улучшает систему в целом**. 
+This project demonstrates how **improving a single process doesn't always improve the entire system**. 
 
-Используя дискретно-событийную симуляцию (SimSharp), мы моделируем производственную линию и показываем:
-- 🎯 Как идентифицировать узкие места (bottlenecks)
-- ❌ Почему оптимизация не-bottleneck бесполезна
-- ✅ Как правильное улучшение дает +18% throughput
+Using discrete-event simulation (SimSharp), we model a production line and show:
+- 🎯 How to identify bottlenecks
+- ❌ Why optimizing non-bottleneck processes is futile
+- ✅ How proper improvement yields +18% throughput
 
-**Применение:** производство, DevOps, бизнес-процессы, любые последовательные системы.
+**Applications:** manufacturing, DevOps, business processes, any sequential systems.
 
 ---
 
-## 🚀 Быстрый старт
+## 🚀 Quick Start
 
-### Требования
-- .NET 8.0 SDK или выше
-- Visual Studio Code или Visual Studio
+### Requirements
+- .NET 8.0 SDK or higher
+- Visual Studio Code or Visual Studio
 
-### Установка и запуск
+### Installation and Run
 
 ```bash
 git clone <your-repo>
@@ -36,41 +36,41 @@ dotnet restore
 dotnet run
 ```
 
-Результаты будут в папке `Results/` (CSV файлы).
+Results will be saved in the `Results/` folder (CSV files).
 
 ---
 
-## 🏭 Модель системы
+## 🏭 System Model
 
-**Производственная линия:**
+**Production Line:**
 
 ```
-[Детали] → [Cutting] → [Assembly] → [Testing] → [Packaging] → [Готово]
-            8 мин       12 мин        10 мин        6 мин
-                          ↑
-                     BOTTLENECK!
+[Items] → [Cutting] → [Assembly] → [Testing] → [Packaging] → [Complete]
+           8 min       12 min        10 min        6 min
+                         ↑
+                    BOTTLENECK!
 ```
 
-**Параметры симуляции:**
-- 4 станции последовательно
-- 1 станок на каждой станции
-- 20 деталей
-- Интервал прибытия: 5 минут
+**Simulation Parameters:**
+- 4 sequential stations
+- 1 machine per station
+- 20 items
+- Arrival interval: 5 minutes
 
 ---
 
-## 📊 Результаты
+## 📊 Results
 
-### Сравнение сценариев
+### Scenario Comparison
 
-| Сценарий | Описание | Throughput | Изменение | Lead Time |
+| Scenario | Description | Throughput | Change | Lead Time |
 |----------|----------|------------|-----------|-----------|
-| **Baseline** | Стандартная конфигурация | 4.55 дет/ч | - | 102 мин |
-| **ImprovedCutting** | Ускорили Cutting на 20% | 4.57 дет/ч | +0.6% ❌ | 101 мин |
-| **BottleneckFixed** | Ускорили Assembly на 20% | 5.37 дет/ч | **+18%** ✅ | 81 мин |
-| **Stochastic** | Реалистичная вариативность | 4.53 дет/ч | -0.4% | 116 мин |
+| **Baseline** | Standard configuration | 4.55 items/h | - | 102 min |
+| **ImprovedCutting** | Cutting +20% faster | 4.57 items/h | +0.6% ❌ | 101 min |
+| **BottleneckFixed** | Assembly +20% faster | 5.37 items/h | **+18%** ✅ | 81 min |
+| **Stochastic** | Realistic variability | 4.53 items/h | -0.4% | 116 min |
 
-### Визуализация утилизации
+### Utilization Visualization
 
 ```
 Assembly  ████████████████████████████████████████████  90.9% ← Bottleneck!
@@ -81,136 +81,136 @@ Packaging ████████████████████          
 
 ---
 
-## 💡 Ключевые выводы
+## 💡 Key Findings
 
-### ❌ Парадокс: Улучшение не-bottleneck
+### ❌ Paradox: Improving non-bottleneck
 
-Ускорили **Cutting** на 20%:
-- Throughput: +0.6% (практически ноль)
-- Lead Time: почти не изменился
-- **Вывод:** Бесполезно!
+Improved **Cutting** by 20%:
+- Throughput: +0.6% (virtually zero)
+- Lead Time: barely changed
+- **Conclusion:** Useless!
 
-### ✅ Правильный подход: Улучшение bottleneck
+### ✅ Correct Approach: Improving bottleneck
 
-Ускорили **Assembly** на 20%:
+Improved **Assembly** by 20%:
 - Throughput: **+18.1%** 🚀
 - Lead Time: **-20.9%** 🚀
-- **Вывод:** Значительный системный эффект!
+- **Conclusion:** Significant system-wide effect!
 
-### 🎯 Теория ограничений (TOC)
+### 🎯 Theory of Constraints (TOC)
 
-1. Идентифицируйте bottleneck (Assembly: 90.9% утилизация)
-2. Эксплуатируйте bottleneck (не допускайте простоя)
-3. Подчините все остальное bottleneck
-4. **Улучшайте только bottleneck**
-5. Повторите процесс
+1. Identify bottleneck (Assembly: 90.9% utilization)
+2. Exploit bottleneck (prevent idle time)
+3. Subordinate everything to bottleneck
+4. **Improve only the bottleneck**
+5. Repeat the process
 
 ---
 
-## 📁 Структура проекта
+## 📁 Project Structure
 
 ```
 SimSharpExample/
-├── Program.cs              # Точка входа
+├── Program.cs              # Entry point
 ├── Simulation/
-│   ├── Item.cs            # Модель детали
-│   ├── Station.cs         # Модель станции
-│   └── ProductionLine.cs  # Производственная линия
+│   ├── Item.cs            # Item model
+│   ├── Station.cs         # Station model
+│   └── ProductionLine.cs  # Production line
 ├── Metrics/
-│   ├── MetricsCollector.cs      # Сбор метрик
-│   ├── CsvExporter.cs           # Экспорт в CSV
-│   └── ComparisonAnalyzer.cs    # Сравнительный анализ
+│   ├── MetricsCollector.cs      # Metrics collection
+│   ├── CsvExporter.cs           # CSV export
+│   └── ComparisonAnalyzer.cs    # Comparative analysis
 ├── Scenarios/
-│   ├── BaselineScenario.cs       # Базовая конфигурация
-│   ├── ImprovedStationScenario.cs # Улучшение не-bottleneck
-│   ├── BottleneckFixedScenario.cs # Улучшение bottleneck
-│   └── StochasticScenario.cs      # Стохастическая модель
+│   ├── BaselineScenario.cs       # Base configuration
+│   ├── ImprovedStationScenario.cs # Non-bottleneck improvement
+│   ├── BottleneckFixedScenario.cs # Bottleneck improvement
+│   └── StochasticScenario.cs      # Stochastic model
 └── Utils/
-    └── RandomDistributions.cs    # Случайные распределения
+    └── RandomDistributions.cs    # Random distributions
 ```
 
 ---
 
-## 📈 Метрики
+## 📈 Metrics
 
-Проект собирает следующие метрики:
+The project collects the following metrics:
 
-- **Utilization** - процент занятости станции
-- **Throughput** - деталей в час
-- **Lead Time** - время детали в системе
-- **Queue Length** - длина очереди
+- **Utilization** - percentage of station busy time
+- **Throughput** - items per hour
+- **Lead Time** - time item spends in system
+- **Queue Length** - queue size
 - **WIP** - Work In Progress
 
-Все метрики экспортируются в CSV для дальнейшего анализа.
+All metrics are exported to CSV for further analysis.
 
 ---
 
-## 🎓 Концепции
+## 🎓 Concepts
 
-### Дискретно-событийная симуляция (DES)
-- События происходят в конкретные моменты времени
-- Модель времени: симуляционное время (не реальное)
-- Процессы: корутины с `yield return`
+### Discrete-Event Simulation (DES)
+- Events occur at specific points in time
+- Time model: simulation time (not real time)
+- Processes: coroutines with `yield return`
 
 ### Theory of Constraints (TOC)
-- Любая система ограничена узким местом
-- Улучшение не-bottleneck не улучшает систему
-- Фокус на системной производительности, а не локальной
+- Any system is limited by a bottleneck
+- Improving non-bottleneck doesn't improve system
+- Focus on system performance, not local
 
-### Ключевые распределения
-- **Exponential** - для случайных прибытий
-- **Normal** - для времени обработки с вариативностью
-
----
-
-## 🔧 Технологии
-
-- **SimSharp 3.4.2** - библиотека дискретно-событийной симуляции
-- **C# 12** - язык программирования
-- **.NET 8.0** - платформа
-- **CSV Export** - для анализа в Excel/Python
+### Key Distributions
+- **Exponential** - for random arrivals
+- **Normal** - for processing time with variability
 
 ---
 
-## 📊 Использование результатов
+## 🔧 Technologies
 
-CSV файлы можно импортировать в:
-- **Excel** - для построения графиков
-- **Python (pandas, matplotlib)** - для детального анализа
-- **Power BI / Tableau** - для интерактивных дашбордов
-
----
-
-## 🎯 Применение в реальном мире
-
-Эта модель применима к:
-
-- ✅ Производственные линии
-- ✅ CI/CD пайплайны
-- ✅ Обработка заявок в поддержке
-- ✅ Последовательные бизнес-процессы
-- ✅ Любые системы с bottlenecks
-
-**Вывод:** Не оптимизируйте локально. Найдите узкое место и улучшайте его!
+- **SimSharp 3.4.2** - discrete-event simulation library
+- **C# 12** - programming language
+- **.NET 8.0** - platform
+- **CSV Export** - for analysis in Excel/Python
 
 ---
 
-## 📝 Лицензия
+## 📊 Using Results
 
-Этот проект создан в образовательных целях.
-
----
-
-## 🤝 Контакты
-
-Создано для демонстрации SimSharp и концепций дискретно-событийной симуляции.
-
-**Подходит для:**
-- LinkedIn портфолио
-- Технических интервью
-- Обучения DES
-- Демонстрации навыков C# и симуляции
+CSV files can be imported into:
+- **Excel** - for charts
+- **Python (pandas, matplotlib)** - for detailed analysis
+- **Power BI / Tableau** - for interactive dashboards
 
 ---
 
-**⭐ Если проект был полезен, поставьте звезду!**
+## 🎯 Real-World Applications
+
+This model applies to:
+
+- ✅ Manufacturing lines
+- ✅ CI/CD pipelines
+- ✅ Support ticket processing
+- ✅ Sequential business processes
+- ✅ Any systems with bottlenecks
+
+**Conclusion:** Don't optimize locally. Find the bottleneck and improve it!
+
+---
+
+## 📝 License
+
+This project is created for educational purposes.
+
+---
+
+## 🤝 Contact
+
+Created to demonstrate SimSharp and discrete-event simulation concepts.
+
+**Suitable for:**
+- LinkedIn portfolio
+- Technical interviews
+- DES learning
+- Demonstrating C# and simulation skills
+
+---
+
+**⭐ If this project was helpful, give it a star!**

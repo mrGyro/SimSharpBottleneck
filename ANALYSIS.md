@@ -1,165 +1,165 @@
-# 📊 Анализ результатов симуляции производственной линии
+# 📊 Production Line Simulation Analysis
 
-## 🎯 Цель проекта
+## 🎯 Project Goal
 
-Продемонстрировать **парадокс локальной оптимизации** в производственных системах с использованием дискретно-событийной симуляции (SimSharp).
-
----
-
-## 🏭 Модель системы
-
-**Производственная линия из 4 станций:**
-1. **Cutting** (Резка) - 8 минут
-2. **Assembly** (Сборка) - 12 минут ← **BOTTLENECK**
-3. **Testing** (Тестирование) - 10 минут
-4. **Packaging** (Упаковка) - 6 минут
-
-**Параметры:**
-- 20 деталей
-- Интервал прибытия: 5 минут
-- Capacity: 1 станок на каждую станцию
+Demonstrate the **local optimization paradox** in production systems using discrete-event simulation (SimSharp).
 
 ---
 
-## 📈 Результаты сценариев
+## 🏭 System Model
 
-| Сценарий | Throughput | Lead Time | Assembly Util | Изменение |
-|----------|------------|-----------|---------------|-----------|
-| **Baseline** | 4.55 дет/ч | 102.5 мин | 90.9% | - |
-| **ImprovedCutting** | 4.57 дет/ч | 100.9 мин | 91.5% | +0.6% 😐 |
-| **BottleneckFixed** | 5.37 дет/ч | 81.1 мин | 85.9% | +18.1% 🚀 |
-| **Stochastic** | 4.53 дет/ч | 116.3 мин | 90.2% | Реалистичная вариативность |
+**Production line with 4 stations:**
+1. **Cutting** - 8 minutes
+2. **Assembly** - 12 minutes ← **BOTTLENECK**
+3. **Testing** - 10 minutes
+4. **Packaging** - 6 minutes
 
----
-
-## 💡 Ключевые выводы
-
-### ❌ Парадокс: Улучшение не-bottleneck
-
-**Сценарий:** Ускорили Cutting на 20% (8 мин → 6.4 мин)
-
-**Результат:**
-- Throughput: +0.6% (практически ноль!)
-- Lead Time: -1.6% (минимальное улучшение)
-- Assembly утилизация **выросла** до 91.5%
-
-**Почему не работает?**
-- Cutting быстрее подает детали на Assembly
-- Assembly (bottleneck) все равно медленный
-- Очереди перед Assembly растут
-- **Система ограничена самым медленным звеном!**
+**Parameters:**
+- 20 items
+- Arrival interval: 5 minutes
+- Capacity: 1 machine per station
 
 ---
 
-### ✅ Правильный подход: Улучшение bottleneck
+## 📈 Scenario Results
 
-**Сценарий:** Ускорили Assembly на 20% (12 мин → 9.6 мин)
-
-**Результат:**
-- Throughput: **+18.1%** (значительный рост!)
-- Lead Time: **-20.9%** (существенное снижение!)
-- Assembly утилизация снизилась до 85.9%
-
-**Почему работает?**
-- Assembly - узкое место системы
-- Улучшение bottleneck ускоряет всю систему
-- Очереди сокращаются
-- **Системный эффект!**
+| Scenario | Throughput | Lead Time | Assembly Util | Change |
+|----------|------------|-----------|---------------|--------|
+| **Baseline** | 4.55 items/h | 102.5 min | 90.9% | - |
+| **ImprovedCutting** | 4.57 items/h | 100.9 min | 91.5% | +0.6% 😐 |
+| **BottleneckFixed** | 5.37 items/h | 81.1 min | 85.9% | +18.1% 🚀 |
+| **Stochastic** | 4.53 items/h | 116.3 min | 90.2% | Realistic variability |
 
 ---
 
-### 🎲 Стохастическая модель
+## 💡 Key Findings
 
-**Особенности:**
-- Случайное время обработки (Normal distribution, σ=20%)
-- Случайное прибытие деталей (Exponential distribution)
-- Lead Time: 116.3 мин (выше из-за вариативности)
-- Некоторые детали ждут до 3+ часов!
+### ❌ Paradox: Improving non-bottleneck
 
-**Вывод:** Реальные системы всегда имеют вариативность, что увеличивает Lead Time.
+**Scenario:** Improved Cutting by 20% (8 min → 6.4 min)
 
----
+**Result:**
+- Throughput: +0.6% (virtually zero!)
+- Lead Time: -1.6% (minimal improvement)
+- Assembly utilization **increased** to 91.5%
 
-## 🎓 Теория ограничений (Theory of Constraints)
-
-**Основные принципы:**
-
-1. **Идентифицируйте bottleneck** 
-   - В нашем случае: Assembly (90.9% утилизация)
-
-2. **Эксплуатируйте bottleneck**
-   - Убедитесь что он никогда не простаивает
-
-3. **Подчините все остальное bottleneck**
-   - Не перепроизводите на других станциях
-
-4. **Улучшайте bottleneck**
-   - Только это даст системный эффект
-
-5. **Повторите** 
-   - Bottleneck может мигрировать!
+**Why doesn't it work?**
+- Cutting supplies items faster to Assembly
+- Assembly (bottleneck) is still slow
+- Queues before Assembly grow
+- **System is limited by the slowest link!**
 
 ---
 
-## 📊 Метрики эффективности
+### ✅ Correct Approach: Improving bottleneck
 
-### Utilization (Загрузка)
+**Scenario:** Improved Assembly by 20% (12 min → 9.6 min)
+
+**Result:**
+- Throughput: **+18.1%** (significant increase!)
+- Lead Time: **-20.9%** (substantial decrease!)
+- Assembly utilization decreased to 85.9%
+
+**Why does it work?**
+- Assembly is the system's bottleneck
+- Improving bottleneck speeds up entire system
+- Queues shrink
+- **System-wide effect!**
+
+---
+
+### 🎲 Stochastic Model
+
+**Features:**
+- Random processing time (Normal distribution, σ=20%)
+- Random item arrival (Exponential distribution)
+- Lead Time: 116.3 min (higher due to variability)
+- Some items wait up to 3+ hours!
+
+**Conclusion:** Real systems always have variability, which increases Lead Time.
+
+---
+
+## 🎓 Theory of Constraints (TOC)
+
+**Core Principles:**
+
+1. **Identify the bottleneck** 
+   - In our case: Assembly (90.9% utilization)
+
+2. **Exploit the bottleneck**
+   - Ensure it never stays idle
+
+3. **Subordinate everything to the bottleneck**
+   - Don't overproduce at other stations
+
+4. **Elevate the bottleneck**
+   - Only this will have system-wide effect
+
+5. **Repeat** 
+   - Bottleneck may shift!
+
+---
+
+## 📊 Efficiency Metrics
+
+### Utilization (Load)
 - **Assembly: 90.9%** ← bottleneck
 - Cutting: 60.6%
 - Testing: 75.8%
 - Packaging: 45.5%
 
-### Throughput (Пропускная способность)
-- Baseline: 4.55 деталей/час
-- После улучшения bottleneck: **5.37 деталей/час** (+18%)
+### Throughput (Capacity)
+- Baseline: 4.55 items/hour
+- After bottleneck improvement: **5.37 items/hour** (+18%)
 
-### Lead Time (Время в системе)
-- Baseline: 102.5 минут
-- После улучшения bottleneck: **81.1 минут** (-21%)
-
----
-
-## 🚀 Практические рекомендации
-
-### ✅ ДЕЛАЙТЕ:
-1. Измеряйте утилизацию всех ресурсов
-2. Идентифицируйте узкие места (>85% утилизация)
-3. Инвестируйте в улучшение bottleneck
-4. Мониторьте Lead Time и WIP
-5. Используйте симуляцию перед реальными изменениями
-
-### ❌ НЕ ДЕЛАЙТЕ:
-1. Улучшать все станции одновременно
-2. Инвестировать в недогруженные ресурсы
-3. Игнорировать вариативность
-4. Локально оптимизировать без системного взгляда
-5. Увеличивать скорость прибытия без увеличения capacity bottleneck
+### Lead Time (Time in system)
+- Baseline: 102.5 minutes
+- After bottleneck improvement: **81.1 minutes** (-21%)
 
 ---
 
-## 📁 Файлы результатов
+## 🚀 Practical Recommendations
 
-- `Results/Baseline/` - базовая конфигурация
-- `Results/ImprovedCutting/` - улучшение не-bottleneck
-- `Results/BottleneckFixed/` - улучшение bottleneck
-- `Results/Stochastic/` - стохастическая модель
-- `Results/comparison.csv` - сравнительная таблица
+### ✅ DO:
+1. Measure utilization of all resources
+2. Identify bottlenecks (>85% utilization)
+3. Invest in bottleneck improvements
+4. Monitor Lead Time and WIP
+5. Use simulation before real changes
 
----
-
-## 🎯 Итоговый вывод
-
-**Локальная оптимизация ≠ Глобальная оптимизация**
-
-Улучшение отдельного процесса не гарантирует улучшения всей системы. 
-Инвестируйте ресурсы в узкие места, а не в уже быстрые процессы.
-
-**Применимо к:**
-- Производственным линиям
-- DevOps пайплайнам
-- Бизнес-процессам
-- Любым последовательным системам
+### ❌ DON'T:
+1. Improve all stations simultaneously
+2. Invest in underutilized resources
+3. Ignore variability
+4. Locally optimize without system view
+5. Increase arrival rate without increasing bottleneck capacity
 
 ---
 
-*Создано с использованием SimSharp - библиотеки дискретно-событийной симуляции для C#*
+## 📁 Result Files
+
+- `Results/Baseline/` - base configuration
+- `Results/ImprovedCutting/` - non-bottleneck improvement
+- `Results/BottleneckFixed/` - bottleneck improvement
+- `Results/Stochastic/` - stochastic model
+- `Results/comparison.csv` - comparison table
+
+---
+
+## 🎯 Final Conclusion
+
+**Local Optimization ≠ Global Optimization**
+
+Improving individual processes doesn't guarantee system-wide improvement. 
+Invest resources in bottlenecks, not in already fast processes.
+
+**Applicable to:**
+- Manufacturing lines
+- DevOps pipelines
+- Business processes
+- Any sequential systems
+
+---
+
+*Created using SimSharp - discrete-event simulation library for C#*
