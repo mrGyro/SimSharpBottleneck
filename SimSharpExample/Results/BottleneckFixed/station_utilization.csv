@@ -1,0 +1,5 @@
+Station,Utilization,ProcessedItems,AvgQueueLength,MaxQueueLength
+Cutting,71,56,20,0,95,1
+Assembly,85,87,20,0,95,1
+Testing,89,45,20,0,95,1
+Packaging,53,67,20,0,00,0

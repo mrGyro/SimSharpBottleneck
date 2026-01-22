@@ -1,0 +1,5 @@
+Scenario,TotalTimeMinutes,Throughput,AvgLeadTimeMinutes,AssemblyUtilization
+Baseline,264,00,4,55,102,50,90,91
+ImprovedCutting,262,40,4,57,100,90,91,46
+BottleneckFixed,223,60,5,37,81,10,85,87
+Stochastic,264,98,4,53,116,31,90,17
